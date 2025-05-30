@@ -100,7 +100,7 @@ class _SignInScreenState extends State<SignInScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "{Let's Get You \nSign In !",
+                        "Let's Get You \nSign In !",
                         textAlign: TextAlign.start,
                         style: TextStyle(
                           color: const Color(0xff222222),

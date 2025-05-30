@@ -64,43 +64,34 @@ class _MainclinicscreenState extends State<Mainclinicscreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       // Clinic Avatar and Name
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const CircleAvatar(
-                            radius: 50,
-                            backgroundImage: AssetImage(
-                              'assets/images/photocli.jpg',
-                            ),
-                          ),
-                          const SizedBox(height: 16),
-                          Text(
-                            'VetCave',
-                            style: Theme.of(context)
-                                .textTheme
-                                .headlineSmall
-                                ?.copyWith(
-                                  fontWeight: FontWeight.bold,
-                                ),
-                          ),
-                          const SizedBox(height: 8),
-                          Text(
-                            'Kmagzan',
-                            style: Theme.of(context)
-                                .textTheme
-                                .titleMedium
-                                ?.copyWith(
-                                  color: Colors.grey,
-                                ),
-                          ),
-                        ],
-                      ),
+                      // Column(
+                      //   crossAxisAlignment: CrossAxisAlignment.start,
+                      //   children: [
+                      //     const CircleAvatar(
+                      //       radius: 50,
+                      //       backgroundImage: AssetImage(
+                      //         'assets/images/photocli.jpg',
+                      //       ),
+                      //     ),
+                      //     const SizedBox(height: 16),
+                      //     Text(
+                      //       'VetCave',
+                      //       style: TextStyle(
+                      //         color: const Color(0xFF222222),
+                      //         fontSize: 18,
+                      //         fontFamily: 'Poppins',
+                      //         fontWeight: FontWeight.w600,
+                      //         letterSpacing: 3.06,
+                      //       ),
+                      //     ),
+                      //     const SizedBox(height: 8),
+                      //   ],
+                      // ),
 
-                      const SizedBox(height: 24),
+                      const SizedBox(height: 100),
 
                       // Rating
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Icon(Icons.star, color: Colors.amber, size: 24),
                           Icon(Icons.star, color: Colors.amber, size: 24),
@@ -121,9 +112,14 @@ class _MainclinicscreenState extends State<Mainclinicscreen> {
                       // Address Section
                       Text(
                         'Address',
-                        style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                              fontWeight: FontWeight.bold,
-                            ),
+                        style: TextStyle(
+                          color: const Color(0xFF222222),
+                          fontSize: 16,
+                          fontFamily: 'Poppins',
+                          fontWeight: FontWeight.w600,
+                          height: 1.50,
+                          letterSpacing: 0.50,
+                        ),
                       ),
                       const SizedBox(height: 8),
                       Text(
@@ -134,32 +130,61 @@ class _MainclinicscreenState extends State<Mainclinicscreen> {
                       const SizedBox(height: 40),
 
                       // Book Appointment Button
-                      SizedBox(
-                        width: double.infinity,
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.blueAccent,
-                            padding: const EdgeInsets.symmetric(vertical: 16),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: ElevatedButton(
+                              onPressed: () {},
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Color(0xff99DDCC),
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 45, vertical: 14),
+                                elevation: 0,
+                              ),
+                              child: Text(
+                                "Book Appointment",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 16,
+                                  fontFamily: 'Poppins1',
+                                  fontWeight: FontWeight.w400,
+                                  letterSpacing: 2.72,
+                                ),
+                              ),
                             ),
                           ),
-                          onPressed: () {
-                            // Handle booking appointment
-                          },
-                          child: const Text(
-                            'Book Appointment',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
+                        ],
                       ),
                     ],
                   ),
                 ),
+              ],
+            ),
+          ),
+          Positioned(
+            top: 250,
+            left: 42,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const CircleAvatar(
+                  radius: 50,
+                  backgroundImage: AssetImage(
+                    'assets/images/photocli.jpg',
+                  ),
+                ),
+                const SizedBox(height: 16),
+                Text(
+                  'VetCave',
+                  style: TextStyle(
+                    color: const Color(0xFF222222),
+                    fontSize: 18,
+                    fontFamily: 'Poppins',
+                    fontWeight: FontWeight.w600,
+                    letterSpacing: 3.06,
+                  ),
+                ),
+                const SizedBox(height: 8),
               ],
             ),
           ),

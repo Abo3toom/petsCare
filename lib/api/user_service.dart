@@ -6,6 +6,7 @@ class UserService {
   static const String _userNameKey = 'user_name';
   static const String _userEmailKey = 'user_email';
 
+  static const String _userAddressKey = 'user_address';
   // Add these two methods
   static Future<String?> getUserName() async {
     final prefs = await SharedPreferences.getInstance();
@@ -29,6 +30,11 @@ class UserService {
       if (username != null) prefs.setString(_userNameKey, username),
       if (email != null) prefs.setString(_userEmailKey, email),
     ]);
+  }
+
+  static Future<String?> getUserAddress() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString(_userAddressKey);
   }
 
   static Future<String?> getUserId() async {
