@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:petscare/clinicScreens/bookappointement.dart';
 
 class Mainclinicscreen extends StatefulWidget {
   const Mainclinicscreen({super.key});
@@ -91,50 +92,91 @@ class _MainclinicscreenState extends State<Mainclinicscreen> {
                       const SizedBox(height: 100),
 
                       // Rating
-                      Row(
-                        children: [
-                          Icon(Icons.star, color: Colors.amber, size: 24),
-                          Icon(Icons.star, color: Colors.amber, size: 24),
-                          Icon(Icons.star, color: Colors.amber, size: 24),
-                          Icon(Icons.star, color: Colors.amber, size: 24),
-                          Icon(Icons.star_outline,
-                              color: Colors.amber, size: 24),
-                          const SizedBox(width: 8),
-                          Text(
-                            '4 Stars',
-                            style: Theme.of(context).textTheme.titleMedium,
-                          ),
-                        ],
+                      Padding(
+                        padding: const EdgeInsets.only(left: 20),
+                        child: Row(
+                          children: [
+                            Icon(Icons.star, color: Colors.amber, size: 24),
+                            Icon(Icons.star, color: Colors.amber, size: 24),
+                            Icon(Icons.star, color: Colors.amber, size: 24),
+                            Icon(Icons.star, color: Colors.amber, size: 24),
+                            Icon(Icons.star_outline,
+                                color: Colors.amber, size: 24),
+                            const SizedBox(width: 8),
+                            Text(
+                              '4 Stars',
+                              style: Theme.of(context).textTheme.titleMedium,
+                            ),
+                          ],
+                        ),
                       ),
 
                       const SizedBox(height: 24),
 
                       // Address Section
-                      Text(
-                        'Address',
-                        style: TextStyle(
-                          color: const Color(0xFF222222),
-                          fontSize: 16,
-                          fontFamily: 'Poppins',
-                          fontWeight: FontWeight.w600,
-                          height: 1.50,
-                          letterSpacing: 0.50,
+                      Padding(
+                        padding: const EdgeInsets.only(left: 20),
+                        child: Text(
+                          'Address',
+                          style: TextStyle(
+                            color: const Color(0xFF222222),
+                            fontSize: 16,
+                            fontFamily: 'poppins1',
+                            fontWeight: FontWeight.w600,
+                            height: 1.50,
+                            letterSpacing: 0.50,
+                          ),
                         ),
                       ),
                       const SizedBox(height: 8),
-                      Text(
-                        '123 Veterinary Street, Pet City, PC 12345',
-                        style: Theme.of(context).textTheme.bodyLarge,
+                      Padding(
+                        padding: const EdgeInsets.only(left: 20),
+                        child: Text(
+                          '123 Veterinary Street, Pet City, PC 12345',
+                          style: Theme.of(context).textTheme.bodyLarge,
+                        ),
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 20),
+                        child: Text(
+                          'Working hours',
+                          style: TextStyle(
+                            color: const Color(0xFF222222),
+                            fontSize: 16,
+                            fontFamily: 'poppins1',
+                            fontWeight: FontWeight.w600,
+                            height: 1.50,
+                            letterSpacing: 0.50,
+                          ),
+                        ),
                       ),
 
-                      const SizedBox(height: 40),
+                      const SizedBox(height: 8),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 20),
+                        child: Text(
+                          'Open: 9 AM - Closed 8 PM',
+                          style: Theme.of(context).textTheme.bodyLarge,
+                        ),
+                      ),
+                      const SizedBox(height: 250),
 
                       // Book Appointment Button
                       Row(
                         children: [
                           Expanded(
                             child: ElevatedButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          const Bookappointement()),
+                                );
+                              },
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: Color(0xff99DDCC),
                                 padding: EdgeInsets.symmetric(

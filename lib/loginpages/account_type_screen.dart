@@ -125,7 +125,7 @@ class _AccountTypeScreenState extends State<AccountTypeScreen> {
                   GestureDetector(
                     onTap: () {
                       setState(() {
-                        role = 'VeterinaryClinic'; // Set the selected container
+                        role = 'veterinaryClinic'; // Set the selected container
                       });
                     },
                     child: Column(
@@ -143,7 +143,7 @@ class _AccountTypeScreenState extends State<AccountTypeScreen> {
                               ],
                             ),
                             borderRadius: BorderRadius.circular(50),
-                            border: role == 'VeterinaryClinic'
+                            border: role == 'veterinaryClinic'
                                 ? Border.all(
                                     color: Color(
                                         0xff99DDCC), // Selected border color

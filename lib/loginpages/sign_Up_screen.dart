@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:awesome_dialog/awesome_dialog.dart';
-
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:petscare/api/api_service.dart';
@@ -26,6 +25,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController confirmPasswordController =
       TextEditingController();
+  final TextEditingController clinicNameController = TextEditingController();
+  final TextEditingController addressController = TextEditingController();
+  final TextEditingController phoneController = TextEditingController();
 
   bool agree = false;
   bool passwordVisible = false;
@@ -38,7 +40,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
   @override
   void initState() {
     super.initState();
-    fields = [
+    fields = _buildFieldsList();
+  }
+
+  List<Map<String, dynamic>> _buildFieldsList() {
+    final commonFields = [
       {
         "text": "Username",
         "keyboardtype": TextInputType.name,
@@ -75,6 +81,28 @@ class _SignUpScreenState extends State<SignUpScreen> {
           return null;
         },
       },
+    ];
+
+    if (widget.role == 'clinic') {
+      commonFields.insert(1, {
+        "text": "Clinic Name",
+        "keyboardtype": TextInputType.name,
+        "obscuretext": false,
+        "Controller": clinicNameController,
+        "prefixIcon": Icons.business,
+        "suffixIcon": false,
+        "textColor": const Color(0xff222222),
+        "validator": (value) {
+          if (value == null || value.isEmpty) {
+            return 'Please enter clinic name';
+          }
+          return null;
+        },
+      });
+    }
+
+    return [
+      ...commonFields,
       {
         "text": "Password",
         "keyboardtype": TextInputType.text,
@@ -111,6 +139,41 @@ class _SignUpScreenState extends State<SignUpScreen> {
           return null;
         },
       },
+      if (widget.role == 'clinic')
+        {
+          "text": "Address",
+          "keyboardtype": TextInputType.streetAddress,
+          "obscuretext": false,
+          "Controller": addressController,
+          "prefixIcon": Icons.location_on,
+          "suffixIcon": false,
+          "textColor": const Color(0xff222222),
+          "validator": (value) {
+            if (value == null || value.isEmpty) {
+              return 'Please enter clinic address';
+            }
+            return null;
+          },
+        },
+      if (widget.role == 'clinic')
+        {
+          "text": "Phone Number",
+          "keyboardtype": TextInputType.phone,
+          "obscuretext": false,
+          "Controller": phoneController,
+          "prefixIcon": Icons.phone,
+          "suffixIcon": false,
+          "textColor": const Color(0xff222222),
+          "validator": (value) {
+            if (value == null || value.isEmpty) {
+              return 'Please enter phone number';
+            }
+            if (!RegExp(r'^[0-9]{10,15}$').hasMatch(value)) {
+              return 'Please enter a valid phone number';
+            }
+            return null;
+          },
+        },
     ];
   }
 
@@ -122,7 +185,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
           Expanded(
             child: SingleChildScrollView(
               child: Container(
-                // height: screenHeight,
                 color: const Color(0xffF6F6F6),
                 padding: const EdgeInsets.only(top: 92, left: 28, right: 28),
                 child: Form(
@@ -131,8 +193,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "Create \nYour Account",
-                        textAlign: TextAlign.start,
+                        widget.role == 'clinic'
+                            ? "Register Your Clinic"
+                            : "Create Your Account",
                         style: TextStyle(
                           color: const Color(0xff222222),
                           fontSize: 28,
@@ -159,14 +222,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               hintText: field['text'],
                               keyboardType: field['keyboardtype'],
                               obscureText: isPasswordField
-                                  ? (index == 2
+                                  ? (field['text'] == 'Password'
                                       ? !passwordVisible
                                       : !confirmPasswordVisible)
                                   : false,
                               controller: field['Controller'],
                               prefixIcon: field['prefixIcon'],
                               suffixIcon: isPasswordField
-                                  ? (index == 2
+                                  ? (field['text'] == 'Password'
                                       ? (passwordVisible
                                           ? Icons.visibility
                                           : Icons.visibility_off)
@@ -177,7 +240,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               onSuffixTap: isPasswordField
                                   ? () {
                                       setState(() {
-                                        if (index == 2) {
+                                        if (field['text'] == 'Password') {
                                           passwordVisible = !passwordVisible;
                                         } else {
                                           confirmPasswordVisible =
@@ -231,9 +294,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               child: isLoading
                                   ? const CircularProgressIndicator(
                                       color: Colors.white)
-                                  : const Text(
-                                      "Sign Up",
-                                      style: TextStyle(
+                                  : Text(
+                                      widget.role == 'clinic'
+                                          ? "Register Clinic"
+                                          : "Sign Up",
+                                      style: const TextStyle(
                                         color: Colors.white,
                                         fontSize: 16,
                                         fontFamily: 'Poppins1',
@@ -246,7 +311,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         ],
                       ),
                       SizedBox(
-                        // Adjusted this spacer
                         height: MediaQuery.of(context).viewInsets.bottom > 0
                             ? 20
                             : MediaQuery.of(context).size.height * 0.1,
@@ -263,7 +327,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const Text(
-                  'Already Have An Account ? ',
+                  'Already Have An Account? ',
                   style: TextStyle(
                     color: Color(0xFF757575),
                     fontSize: 14,
@@ -314,17 +378,17 @@ class _SignUpScreenState extends State<SignUpScreen> {
         'username': nameController.text.trim(),
         'email': emailController.text.trim(),
         'password': passwordController.text,
-        'role': 'petOwner',
-        'phoneNumber': "0000000000", // Make this a field if needed
-        'address': 'N/A', // Make this a field if needed
+        'role': widget.role, // ✅ هذا هو التعديل المهم
+        'phoneNumber': "0000000000", // يمكنك جعله حقل إذا أردت
+        'address': 'N/A', // يمكنك جعله حقل إذا أردت
       });
 
       if (response.statusCode == 201) {
-        // Auto-login after successful registration
+        // تسجيل دخول تلقائي بعد التسجيل الناجح
         final loginResponse = await ApiService.signIn({
           'email': emailController.text.trim(),
           'password': passwordController.text,
-          'role': widget.role,
+          'role': widget.role, // استخدام نفس الدور هنا أيضاً
         });
 
         if (loginResponse.statusCode == 200) {
@@ -352,6 +416,17 @@ class _SignUpScreenState extends State<SignUpScreen> {
     }
   }
 
+  void _handleLoginError(http.Response response) {
+    final responseBody = jsonDecode(response.body);
+    String errorMessage = 'Login after registration failed';
+
+    if (responseBody['message'] != null) {
+      errorMessage = responseBody['message'];
+    }
+
+    _showErrorDialog(errorMessage);
+  }
+
   void _handleSignUpError(http.Response response) {
     final responseBody = jsonDecode(response.body);
     String errorMessage = 'Registration failed';
@@ -361,6 +436,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
           responseBody['errors'].values.map((v) => v.join('\n')).join('\n');
     } else if (responseBody['message'] != null) {
       errorMessage = responseBody['message'];
+    }
+
+    if (widget.role == 'clinic' && response.statusCode == 400) {
+      errorMessage = 'Clinic registration requires all fields to be filled';
     }
 
     _showErrorDialog(errorMessage);
@@ -383,6 +462,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
     emailController.dispose();
     passwordController.dispose();
     confirmPasswordController.dispose();
+    clinicNameController.dispose();
+    addressController.dispose();
+    phoneController.dispose();
     super.dispose();
   }
 }
