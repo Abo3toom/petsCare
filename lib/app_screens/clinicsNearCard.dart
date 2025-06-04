@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:petscare/clinicScreens/mainClinicScreen.dart';
+import 'package:petscare/clinicScreensAndAppointment/mainClinicScreen.dart';
 
 class Clinicsnearcard extends StatelessWidget {
   final String nameclinic;

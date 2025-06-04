@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:petscare/api/notifications_mobel.dart';
 import 'package:petscare/api/user_service.dart';
-import '../models/notification_model.dart';
-import '../services/user_service.dart'; // لجلب الـ userId من SharedPreferences
 
 class Notifications extends StatefulWidget {
   const Notifications({super.key});

@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:petscare/api/api_service.dart';
 import 'package:petscare/app_screens/petavatar.dart';
-import 'package:petscare/clinicScreens/appointmentSuccess.dart';
+import 'package:petscare/clinicScreensAndAppointment/appointmentSuccess.dart';
 
 class Bookappointement extends StatefulWidget {
   const Bookappointement({super.key});
@@ -404,7 +404,7 @@ class _BookappointementState extends State<Bookappointement> {
                       ),
                     ),
                     // asdasd serviesss
-                    // add code here
+
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: 24),
                       child: GridView.builder(
@@ -492,11 +492,11 @@ class _BookappointementState extends State<Bookappointement> {
                         onPressed: () {
                           // _saveToDatabase;
 
-//
-//
-//
-//
-//
+                          Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      const Appointmentsuccess()));
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Color(0xff99DDCC),

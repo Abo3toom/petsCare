@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:petscare/api/api_service.dart';
 import 'package:petscare/api/user_service.dart';
 import 'package:petscare/app_screens/mainscreen.dart';
+import 'package:petscare/clinicprofil/clinicprofile.dart';
 import 'package:petscare/loginpages/custom_textformfield.dart';
 import 'package:petscare/loginpages/sign_Up_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -200,12 +201,22 @@ class _SignInScreenState extends State<SignInScreen> {
                                       // Verify the data was saved
                                       // await UserService.debugPrintAllValues();
 
-                                      Navigator.pushReplacement(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                const Mainscreen()),
-                                      );
+                                      if (widget.role == "petOwner") {
+                                        Navigator.pushReplacement(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  const Mainscreen()),
+                                        );
+                                      } else if (widget.role ==
+                                          "veterinaryClinic") {
+                                        Navigator.pushReplacement(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  const Clinicprofile()),
+                                        );
+                                      }
                                     } else {
                                       final error = jsonDecode(
                                               response.body)?['message'] ??

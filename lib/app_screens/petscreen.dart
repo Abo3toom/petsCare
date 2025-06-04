@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:petscare/app_screens/buttonAddPet.dart';
+import 'package:petscare/app_screens/midicalRecords.dart';
 import 'package:petscare/app_screens/mycustombutton.dart';
 import 'package:petscare/app_screens/petavatar.dart';
 
@@ -18,18 +19,6 @@ class _PetscreenState extends State<Petscreen> {
     {"name": "Ash", "imageUrl": "assets/images/Ellipse1.png"},
     {"name": "Eddie", "imageUrl": "assets/images/Ellipse3.png"},
     {"name": "Coco", "imageUrl": "assets/images/Ellipse2.png"},
-  ];
-  final List elements = [
-    {
-      "icon": "assets/icons/plus1.svg",
-      "title": "Medical Records",
-      "onTap": () {},
-    },
-    {
-      "icon": "assets/icons/plus2.svg",
-      "title": "Appointments",
-      "onTap": () {},
-    },
   ];
 
   @override
@@ -249,16 +238,18 @@ class _PetscreenState extends State<Petscreen> {
 
                   SizedBox(height: 20),
 
-                  ...List.generate(elements.length, (index) {
-                    return Padding(
+                  Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 20),
                       child: Mycustombutton(
-                        icon: elements[index]["icon"],
-                        title: elements[index]["title"],
-                        onTap: elements[index]["onTap"],
-                      ),
-                    );
-                  }),
+                          icon: "assets/icons/plus1.svg",
+                          title: "Medical Records",
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const Midicalrecords()),
+                            );
+                          }))
                 ],
               ),
             ),

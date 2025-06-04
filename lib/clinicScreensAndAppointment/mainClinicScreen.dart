@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:petscare/clinicScreens/bookappointement.dart';
+import 'package:petscare/clinicScreensAndAppointment/bookappointement.dart';
 
 class Mainclinicscreen extends StatefulWidget {
   const Mainclinicscreen({super.key});

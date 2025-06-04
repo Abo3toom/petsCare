@@ -295,25 +295,25 @@ class _HomescreenState extends State<Homescreen> {
                               letterSpacing: 0.50,
                             ),
                           ),
-                          TextButton(
-                            style: TextButton.styleFrom(
-                              padding: EdgeInsets.zero,
-                              minimumSize: Size(0, 0),
-                              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                            ),
-                            onPressed: () {},
-                            child: Text(
-                              "See All",
-                              style: TextStyle(
-                                color: const Color(0xFF99DDCC),
-                                fontSize: 14,
-                                fontFamily: 'Poppins',
-                                fontWeight: FontWeight.w500,
-                                height: 1.71,
-                                letterSpacing: 0.50,
-                              ),
-                            ),
-                          ),
+                          // TextButton(
+                          //   style: TextButton.styleFrom(
+                          //     padding: EdgeInsets.zero,
+                          //     minimumSize: Size(0, 0),
+                          //     tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                          //   ),
+                          //   onPressed: () {},
+                          //   child: Text(
+                          //     "See All",
+                          //     style: TextStyle(
+                          //       color: const Color(0xFF99DDCC),
+                          //       fontSize: 14,
+                          //       fontFamily: 'Poppins',
+                          //       fontWeight: FontWeight.w500,
+                          //       height: 1.71,
+                          //       letterSpacing: 0.50,
+                          //     ),
+                          //   ),
+                          // ),
                         ],
                       ),
                     ),
@@ -361,25 +361,25 @@ class _HomescreenState extends State<Homescreen> {
                               letterSpacing: 0.50,
                             ),
                           ),
-                          TextButton(
-                            style: TextButton.styleFrom(
-                              padding: EdgeInsets.zero,
-                              minimumSize: Size(0, 0),
-                              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                            ),
-                            onPressed: () {},
-                            child: Text(
-                              "See All",
-                              style: TextStyle(
-                                color: const Color(0xFF99DDCC),
-                                fontSize: 14,
-                                fontFamily: 'Poppins',
-                                fontWeight: FontWeight.w500,
-                                height: 1.71,
-                                letterSpacing: 0.50,
-                              ),
-                            ),
-                          ),
+                          // TextButton(
+                          //   style: TextButton.styleFrom(
+                          //     padding: EdgeInsets.zero,
+                          //     minimumSize: Size(0, 0),
+                          //     tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                          //   ),
+                          //   onPressed: () {},
+                          //   child: Text(
+                          //     "See All",
+                          //     style: TextStyle(
+                          //       color: const Color(0xFF99DDCC),
+                          //       fontSize: 14,
+                          //       fontFamily: 'Poppins',
+                          //       fontWeight: FontWeight.w500,
+                          //       height: 1.71,
+                          //       letterSpacing: 0.50,
+                          //     ),
+                          //   ),
+                          // ),
                         ],
                       ),
                     ),
