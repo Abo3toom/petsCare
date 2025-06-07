@@ -6,13 +6,14 @@ class Clinicsnearcard extends StatelessWidget {
   final String imageclinic;
   final String cliniclocation;
   final double rating;
-
+  final String? clinicId;
   const Clinicsnearcard(
       {super.key,
       required this.nameclinic,
       required this.imageclinic,
       required this.cliniclocation,
-      required this.rating});
+      required this.rating,
+      this.clinicId});
 
   @override
   Widget build(BuildContext context) {

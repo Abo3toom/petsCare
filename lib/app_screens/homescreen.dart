@@ -23,7 +23,10 @@ class Homescreen extends StatefulWidget {
 class _HomescreenState extends State<Homescreen> {
   String userName = '';
   Timer? _debounce;
-
+  TextEditingController _searchController = TextEditingController();
+  bool _isSearching = false;
+  bool _isLoading = false;
+  String? _searchError;
   @override
   void initState() {
     super.initState();
@@ -78,24 +81,49 @@ class _HomescreenState extends State<Homescreen> {
   }
 
   Future<void> fetchClinics(String keyword) async {
-    final url =
-        Uri.parse('https://api.docai.online/api/clinics/search?q=$keyword');
-    final response = await http.get(url);
+    if (keyword.isEmpty) {
+      setState(() {
+        searchResults = [];
+        _isSearching = false;
+      });
+      return;
+    }
 
-    if (response.statusCode == 200) {
-      try {
-        final List<dynamic> data = jsonDecode(response.body);
+    print("Searching for: '$keyword'");
+
+    try {
+      final url = Uri.parse(
+          'https://api.docai.online/api/clinics/search?q=${Uri.encodeQueryComponent(keyword)}');
+      print("Full URL: $url");
+
+      final response = await http.get(url);
+
+      print("API Response: ${response.statusCode}");
+      print("Response Body: ${response.body}");
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+
+        // TEMPORARY: Force test data
+        // final data = [{
+        //   'id': 'test1',
+        //   'name': 'Test Clinic',
+        //   'address': '123 Test St',
+        //   'rating': 4.5,
+        //   'image': 'https://example.com/test.jpg'
+        // }];
+
+        if (data is List && data.isEmpty) {
+          print("No clinics found for search term: '$keyword'");
+        }
+
         setState(() {
           searchResults = List<Map<String, dynamic>>.from(data);
-        });
-      } catch (e) {
-        print('JSON decode error: $e');
-        setState(() {
-          searchResults = [];
+          _isSearching = true;
         });
       }
-    } else {
-      print("Error fetching clinics: ${response.statusCode}");
+    } catch (e) {
+      print("Search error: $e");
     }
   }
 
@@ -122,6 +150,14 @@ class _HomescreenState extends State<Homescreen> {
         print("Error fetching nearby clinics: ${response.statusCode}");
       }
     }
+  }
+
+  String _getValidImageUrl(Map<String, dynamic> clinic) {
+    final image = clinic['image'] ?? clinic['imageUrl'] ?? clinic['logo'];
+    if (image == null) return 'assets/images/photocli.jpg';
+    if (image.toString().startsWith('http')) return image;
+    if (image.toString().startsWith('assets/')) return image;
+    return 'assets/images/photocli.jpg';
   }
 
   @override
@@ -238,9 +274,21 @@ class _HomescreenState extends State<Homescreen> {
                         Expanded(
                           child: Form(
                             child: TextFormField(
+                              controller: _searchController,
                               onChanged: (value) {
+                                if (value.isEmpty) {
+                                  setState(() {
+                                    searchResults = [];
+                                    _isSearching = false;
+                                  });
+                                  return;
+                                }
+
                                 if (_debounce?.isActive ?? false)
                                   _debounce!.cancel();
+
+                                setState(() => _isSearching = true);
+
                                 _debounce =
                                     Timer(Duration(milliseconds: 500), () {
                                   fetchClinics(value);
@@ -258,8 +306,19 @@ class _HomescreenState extends State<Homescreen> {
                                 ),
                                 prefixIcon:
                                     Icon(Icons.menu, color: Color(0xff49454F)),
-                                suffixIcon: Icon(Icons.search,
-                                    color: Color(0xff49454F)),
+                                suffixIcon: _searchController.text.isNotEmpty
+                                    ? IconButton(
+                                        icon: Icon(Icons.close),
+                                        onPressed: () {
+                                          _searchController.clear();
+                                          setState(() {
+                                            searchResults = [];
+                                            _isSearching = false;
+                                          });
+                                        },
+                                      )
+                                    : Icon(Icons.search,
+                                        color: Color(0xff49454F)),
                                 focusedBorder: OutlineInputBorder(
                                     borderSide:
                                         BorderSide(color: Color(0xffDBDEDF)),
@@ -352,7 +411,9 @@ class _HomescreenState extends State<Homescreen> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            "Clinics near you",
+                            _isSearching
+                                ? "Search Results"
+                                : "Clinics near you",
                             style: TextStyle(
                               color: const Color(0xFF222222),
                               fontSize: 16,
@@ -385,39 +446,74 @@ class _HomescreenState extends State<Homescreen> {
                     ),
 
                     // CLINICS NEAR YOU CARDS
-                    ////////////////////////////////mai
-                    ...searchResults.isNotEmpty
-                        ? searchResults.map((clinic) => Clinicsnearcard(
-                              nameclinic: clinic['name'] ?? '',
-                              imageclinic: (clinic['image']
-                                          ?.toString()
-                                          .startsWith('http') ??
-                                      false)
-                                  ? clinic['image']
-                                  : 'assets/images/photocli.jpg',
-                              cliniclocation: clinic['address'] ?? '',
-                              rating: double.tryParse(
-                                      clinic['rating']?.toString() ?? '0') ??
-                                  0.0,
-                            ))
-                        : nearbyClinics.isNotEmpty
-                            ? nearbyClinics.map((clinic) => Clinicsnearcard(
-                                  nameclinic: clinic['userName'] ?? '',
-                                  imageclinic: 'assets/images/photocli.jpg',
-                                  cliniclocation: clinic['address'] ?? '',
-                                  rating: double.tryParse(
-                                          clinic['rating']?.toString() ??
-                                              '0') ??
-                                      0.0,
-                                ))
-                            : [
-                                Clinicsnearcard(
-                                    nameclinic: "Vetspetsclinic",
-                                    imageclinic: "assets/images/photocli1.jpg",
-                                    cliniclocation: "amman, jordan",
-                                    rating: 5.0),
-                              ],
-                    /////////////////////////////////////////
+                    // ...searchResults.isNotEmpty
+                    //     ? searchResults.map((clinic) => Clinicsnearcard(
+                    //           nameclinic: clinic['name'] ?? '',
+                    //           imageclinic: (clinic['image']
+                    //                       ?.toString()
+                    //                       .startsWith('http') ??
+                    //                   false)
+                    //               ? clinic['image']
+                    //               : 'assets/images/photocli.jpg',
+                    //           cliniclocation: clinic['address'] ?? '',
+                    //           rating: double.tryParse(
+                    //                   clinic['rating']?.toString() ?? '0') ??
+                    //               0.0,
+                    //         ))
+                    //     : nearbyClinics.isNotEmpty
+                    // ? nearbyClinics.map((clinic) => Clinicsnearcard(
+                    //               nameclinic: clinic['userName'] ?? '',
+                    //               imageclinic: 'assets/images/photocli.jpg',
+                    //               cliniclocation: clinic['address'] ?? '',
+                    //               rating: double.tryParse(
+                    //                       clinic['rating']?.toString() ??
+                    //                           '0') ??
+                    //                   0.0,
+                    //             ))
+                    //         : [
+                    //             Clinicsnearcard(
+                    //                 nameclinic: "Vetspetsclinic",
+                    //                 imageclinic: "assets/images/photocli1.jpg",
+                    //                 cliniclocation: "amman, jordan",
+                    //                 rating: 5.0),
+                    //           ],
+                    _isLoading
+                        ? Center(child: CircularProgressIndicator())
+                        : _searchError != null
+                            ? Padding(
+                                padding: EdgeInsets.symmetric(vertical: 20),
+                                child: Text(
+                                  _searchError!,
+                                  style: TextStyle(color: Colors.red),
+                                ),
+                              )
+                            : (_isSearching ? searchResults : nearbyClinics)
+                                    .isEmpty
+                                ? Padding(
+                                    padding: EdgeInsets.symmetric(vertical: 20),
+                                    child: Text(
+                                      _isSearching
+                                          ? "No matching clinics found"
+                                          : "No nearby clinics available",
+                                      style: TextStyle(color: Colors.grey),
+                                    ),
+                                  )
+                                : Column(
+                                    children: searchResults
+                                        .map((clinic) => Clinicsnearcard(
+                                              nameclinic: clinic['username'] ??
+                                                  'Unknown Clinic', // Using username temporarily
+                                              imageclinic:
+                                                  'assets/images/photocli1.jpg', // Default image since none in response
+                                              cliniclocation:
+                                                  clinic['address'] ??
+                                                      'Location not available',
+                                              rating:
+                                                  5.0, // Default rating since none in response
+                                              clinicId: clinic['id'],
+                                            ))
+                                        .toList(),
+                                  )
                   ],
                 ),
               ),

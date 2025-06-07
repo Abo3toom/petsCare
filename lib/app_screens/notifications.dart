@@ -1,8 +1,4 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'package:petscare/api/notifications_mobel.dart';
-import 'package:petscare/api/user_service.dart';
 
 class Notifications extends StatefulWidget {
   const Notifications({super.key});
@@ -12,41 +8,6 @@ class Notifications extends StatefulWidget {
 }
 
 class _NotificationsState extends State<Notifications> {
-  List<NotificationModel> _notifications = [];
-  bool _isLoading = true;
-
-  @override
-  void initState() {
-    super.initState();
-    _fetchNotifications();
-  }
-
-  Future<void> _fetchNotifications() async {
-    final userId = await UserService.getUserId();
-    if (userId == null) return;
-
-    final url = Uri.parse(
-        'https://pet-care-system-api.vercel.app/api/notifications/$userId');
-
-    try {
-      final response = await http.get(url);
-
-      if (response.statusCode == 200) {
-        final List data = json.decode(response.body);
-        setState(() {
-          _notifications =
-              data.map((json) => NotificationModel.fromJson(json)).toList();
-          _isLoading = false;
-        });
-      } else {
-        throw Exception('Failed to load notifications');
-      }
-    } catch (e) {
-      print("Error: $e");
-      setState(() => _isLoading = false);
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -101,29 +62,6 @@ class _NotificationsState extends State<Notifications> {
                   const SizedBox(height: 15),
 
                   // Body
-                  Expanded(
-                    child: _isLoading
-                        ? const Center(child: CircularProgressIndicator())
-                        : _notifications.isEmpty
-                            ? const Center(
-                                child: Text('No notifications found.'))
-                            : ListView.builder(
-                                itemCount: _notifications.length,
-                                itemBuilder: (context, index) {
-                                  final item = _notifications[index];
-                                  return ListTile(
-                                    leading: const Icon(Icons.notifications),
-                                    title: Text(item.title),
-                                    subtitle: Text(item.message),
-                                    trailing: Text(
-                                      "${item.timestamp.toLocal()}"
-                                          .split(' ')[0],
-                                      style: const TextStyle(fontSize: 12),
-                                    ),
-                                  );
-                                },
-                              ),
-                  ),
                 ],
               ),
             ),
