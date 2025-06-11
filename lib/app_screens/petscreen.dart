@@ -235,21 +235,6 @@ class _PetscreenState extends State<Petscreen> {
                       ],
                     ),
                   ),
-
-                  SizedBox(height: 20),
-
-                  Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                      child: Mycustombutton(
-                          icon: "assets/icons/plus1.svg",
-                          title: "Medical Records",
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const Midicalrecords()),
-                            );
-                          }))
                 ],
               ),
             ),

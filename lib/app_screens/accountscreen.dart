@@ -1,9 +1,14 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:petscare/api/user_service.dart';
+import 'package:petscare/app_screens/editProfile.dart';
 import 'package:petscare/app_screens/mycustombutton.dart';
 import 'package:petscare/loginpages/account_type_screen.dart';
 import 'package:petscare/loginpages/sign_In_Screen.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:file_picker/file_picker.dart';
 
 class Accountscreen extends StatefulWidget {
   const Accountscreen({super.key});
@@ -31,32 +36,57 @@ class _AccountscreenState extends State<Accountscreen> {
     });
   }
 
+  // for photo
+  File? _selectedImage;
+
+  Future<void> _pickImage() async {
+    try {
+      FilePickerResult? result = await FilePicker.platform.pickFiles(
+        type: FileType.image,
+        allowMultiple: false,
+      );
+
+      if (result != null && result.files.isNotEmpty) {
+        setState(() {
+          _selectedImage = File(result.files.single.path!);
+        });
+      }
+    } catch (e) {
+      print("Error picking image: $e");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final List elements = [
       {
         "icon": "assets/icons/user-outline.svg",
         "title": "Edit Profile",
-        "onTap": () {},
+        "onTap": () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const Editprofile()),
+          );
+        },
       },
       {
         "icon": "assets/icons/language.svg",
         "title": "Language",
         "onTap": () {},
       },
-      {
-        "icon": "assets/icons/paw-outline.svg",
-        "title": "My Pets",
-        "onTap": () {},
-      },
-      {
-        "icon": "assets/icons/book.svg",
-        "title": "Learning Space",
-        "onTap": () {},
-      },
+      // {
+      //   "icon": "assets/icons/paw-outline.svg",
+      //   "title": "My Pets",
+      //   "onTap": () {},
+      // },
+      // {
+      //   "icon": "assets/icons/book.svg",
+      //   "title": "Learning Space",
+      //   "onTap": () {},
+      // },
       {
         "icon": "assets/icons/logout.svg",
-        "title": "Logout",
+        "title": "Sign out",
         "onTap": () async {
           try {
             await UserService.logout();
@@ -111,21 +141,37 @@ class _AccountscreenState extends State<Accountscreen> {
                   Container(
                     width: screenWidth * 0.2503,
                     decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(180),
-                        color: Color(0xffD9DEDF)),
+                      borderRadius: BorderRadius.circular(180),
+                      color: Color(0xffD9DEDF),
+                    ),
                     child: Center(
                       child: Stack(
                         children: [
-                          Icon(
-                            Icons.person,
-                            size: screenWidth * 0.2430,
-                            color: Colors.white,
-                          ),
+                          // Profile image or placeholder
+                          _selectedImage != null
+                              ? ClipOval(
+                                  child: Image.file(
+                                    _selectedImage!,
+                                    width: screenWidth * 0.2430,
+                                    height: screenWidth * 0.2430,
+                                    fit: BoxFit.cover,
+                                  ),
+                                )
+                              : Icon(
+                                  Icons.person,
+                                  size: screenWidth * 0.2430,
+                                  color: Colors.white,
+                                ),
+
+                          // Camera add button
                           Positioned(
                             bottom: 0,
                             right: 0,
-                            child:
-                                SvgPicture.asset("assets/icons/cameraAdd.svg"),
+                            child: GestureDetector(
+                              onTap: _pickImage,
+                              child: SvgPicture.asset(
+                                  "assets/icons/cameraAdd.svg"),
+                            ),
                           ),
                         ],
                       ),

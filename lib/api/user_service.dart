@@ -6,7 +6,7 @@ class UserService {
   static const String _userNameKey = 'user_name';
   static const String _userEmailKey = 'user_email';
   static const String _userClinicNameKey = 'userClinicName'; //aa
-
+  static const String _userPhoneKey = 'user_phone';
   static const String _userAddressKey = 'user_address';
   // Add these two methods
   static Future<String?> getUserName() async {
@@ -24,6 +24,7 @@ class UserService {
     required String userId,
     String? username,
     String? email,
+    String? phone,
     String? clinicName,
     String? address,
   }) async {
@@ -33,6 +34,7 @@ class UserService {
         prefs.setString(_userIdKey, userId),
         if (username != null) prefs.setString(_userNameKey, username),
         if (email != null) prefs.setString(_userEmailKey, email),
+        if (phone != null) prefs.setString(_userPhoneKey, phone),
         if (clinicName != null) prefs.setString(_userClinicNameKey, clinicName),
         if (address != null) prefs.setString(_userAddressKey, address),
       ]);
@@ -41,6 +43,11 @@ class UserService {
       print('Error saving user data: $e');
       return false;
     }
+  }
+
+  static Future<String?> getUserPhone() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString(_userPhoneKey);
   }
 
   static Future<String?> getUserAddress() async {

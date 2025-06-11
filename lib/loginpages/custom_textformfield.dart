@@ -10,6 +10,7 @@ class CustomTextFormField extends StatelessWidget {
   final VoidCallback? onSuffixTap;
   final Color? textColor;
   final String? Function(String?)? validator;
+  final GestureTapCallback? onTap;
 
   const CustomTextFormField(
       {super.key,
@@ -21,7 +22,8 @@ class CustomTextFormField extends StatelessWidget {
       this.suffixIcon,
       this.textColor,
       this.onSuffixTap,
-      this.validator});
+      this.validator,
+      this.onTap});
 
   @override
   Widget build(BuildContext context) {

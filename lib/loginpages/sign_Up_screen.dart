@@ -380,7 +380,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         'email': emailController.text.trim(),
         'password': passwordController.text,
         'role': widget.role, // ✅ هذا هو التعديل المهم
-        'phoneNumber': "0000000000", // يمكنك جعله حقل إذا أردت
+        'phoneNumber': "", // يمكنك جعله حقل إذا أردت
         'address': 'N/A', // يمكنك جعله حقل إذا أردت
       });
 

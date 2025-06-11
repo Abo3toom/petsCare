@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:shared_preferences/shared_preferences.dart';
 
 class ApiService {
   static const String _baseUrl = 'https://api.docai.online';
@@ -62,7 +61,25 @@ class ApiService {
   // ==================== Pet Profiles ====================
   static Future<http.Response> createPetProfile(
       Map<String, dynamic> data) async {
-    return await _post('/api/petProfiles', data);
+    final url = Uri.parse('$_baseUrl/api/petProfiles');
+    print('Creating pet profile with data: $data');
+
+    try {
+      final response = await http.post(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode(data),
+      );
+
+      print(
+          'Pet profile creation response: ${response.statusCode} ${response.body}');
+      return response;
+    } catch (e) {
+      print('Error creating pet profile: $e');
+      rethrow;
+    }
   }
 
   static Future<http.Response> getOwnerPets(String ownerId) async {
@@ -133,14 +150,18 @@ class ApiService {
   // ==================== Core HTTP Methods ====================
   static Future<http.Response> _get(String endpoint) async {
     final url = Uri.parse('$_baseUrl$endpoint');
-    return await http.get(url, headers: headers);
+    return await http.get(url, headers: {
+      'Content-Type': 'application/json',
+    });
   }
 
   static Future<http.Response> _post(String endpoint, dynamic data) async {
     final url = Uri.parse('$_baseUrl$endpoint');
     return await http.post(
       url,
-      headers: await _getHeaders(),
+      headers: {
+        'Content-Type': 'application/json',
+      },
       body: jsonEncode(data),
     );
   }
@@ -149,7 +170,9 @@ class ApiService {
     final url = Uri.parse('$_baseUrl$endpoint');
     return await http.put(
       url,
-      headers: await _getHeaders(),
+      headers: {
+        'Content-Type': 'application/json',
+      },
       body: jsonEncode(data),
     );
   }
@@ -165,17 +188,19 @@ class ApiService {
 
   static Future<http.Response> _delete(String endpoint) async {
     final url = Uri.parse('$_baseUrl$endpoint');
-    return await http.delete(url, headers: await _getHeaders());
+    return await http.delete(
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    );
   }
 
   // ==================== Auth Helper ====================
   static Future<Map<String, String>> _getHeaders() async {
-    final headers = {'Content-Type': 'application/json'};
-    final prefs = await SharedPreferences.getInstance();
-    final token = prefs.getString('token');
-    if (token != null) {
-      headers['Authorization'] = 'Bearer $token';
-    }
-    return headers;
+    return {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+    };
   }
 }

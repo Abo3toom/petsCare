@@ -4,7 +4,8 @@ class CustomDropdownField<T> extends StatelessWidget {
   final String hintText;
   final T? value;
   final List<DropdownMenuItem<T>> items;
-  final ValueChanged<T?> onChanged;
+  final ValueChanged<T?>? onChanged;
+  final FormFieldValidator<T>? validator;
 
   const CustomDropdownField({
     super.key,
@@ -12,6 +13,7 @@ class CustomDropdownField<T> extends StatelessWidget {
     required this.value,
     required this.items,
     required this.onChanged,
+    this.validator,
   });
 
   @override

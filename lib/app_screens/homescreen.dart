@@ -258,8 +258,6 @@ class _HomescreenState extends State<Homescreen> {
                                 },
                                 child: Icon(Icons.notifications_none),
                               ),
-                              SizedBox(width: screenWidth * 0.0364),
-                              Icon(Icons.more_horiz, color: Colors.black),
                             ],
                           ),
                         ),

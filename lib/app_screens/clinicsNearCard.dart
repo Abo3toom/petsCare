@@ -106,8 +106,6 @@ class Clinicsnearcard extends StatelessWidget {
                     ],
                   ),
                 ),
-                Spacer(),
-                IconButton(onPressed: () {}, icon: Icon(Icons.favorite_border)),
               ],
             ),
           ),
