@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:petscare/api/user_service.dart';
 import 'package:petscare/clinicScreensAndAppointment/bookappointement.dart';
+import 'package:petscare/loginpages/account_type_screen.dart';
 
 class Clinicprofile extends StatefulWidget {
   const Clinicprofile({super.key});
@@ -26,8 +28,23 @@ class _MainclinicscreenState extends State<Clinicprofile> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () {},
+          icon: const Icon(Icons.logout_outlined, color: Colors.black),
+          onPressed: () async {
+            try {
+              await UserService.logout();
+              print("logout is =+============================");
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const AccountTypeScreen()),
+                (route) => false, // This removes all previous routes
+              );
+            } catch (e) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text('Logout failed: ${e.toString()}')),
+              );
+            }
+          },
         ),
         title: Text(
           "Clinic Details",

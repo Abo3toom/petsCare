@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:petscare/app_screens/aIchatscreen.dart';
 import 'package:petscare/app_screens/appointmentCards.dart';
 import 'package:petscare/app_screens/clinicsNearCard.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:petscare/app_screens/notifications.dart';
+import 'package:petscare/welcomepages/aIchatbotScreen.dart';
 import '../api/user_service.dart';
 import 'dart:async';
 
@@ -487,13 +490,19 @@ class _HomescreenState extends State<Homescreen> {
                               )
                             : (_isSearching ? searchResults : nearbyClinics)
                                     .isEmpty
-                                ? Padding(
-                                    padding: EdgeInsets.symmetric(vertical: 20),
-                                    child: Text(
-                                      _isSearching
-                                          ? "No matching clinics found"
-                                          : "No nearby clinics available",
-                                      style: TextStyle(color: Colors.grey),
+                                ? ConstrainedBox(
+                                    constraints: BoxConstraints(
+                                      minHeight: 350, // minimum height
+                                    ),
+                                    child: Padding(
+                                      padding:
+                                          EdgeInsets.symmetric(vertical: 20),
+                                      child: Text(
+                                        _isSearching
+                                            ? "No matching clinics found"
+                                            : "No nearby clinics available",
+                                        style: TextStyle(color: Colors.grey),
+                                      ),
                                     ),
                                   )
                                 : Column(
@@ -511,8 +520,37 @@ class _HomescreenState extends State<Homescreen> {
                                               clinicId: clinic['id'],
                                             ))
                                         .toList(),
-                                  )
+                                  ),
                   ],
+                ),
+              ),
+            ),
+            Positioned(
+              bottom: 10,
+              right: 10,
+              child: InkWell(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => AIChatScreen1()),
+                  );
+                },
+                borderRadius: BorderRadius.circular(28), // Half of width/height
+                child: Container(
+                  width: 56,
+                  height: 56,
+                  decoration: BoxDecoration(
+                    color: const Color(0xFF99DDCC),
+                    shape: BoxShape.circle, // Makes it circular
+                  ),
+                  child: Center(
+                    child: SvgPicture.asset(
+                      'assets/icons/message-chatbot.svg',
+                      width: 27,
+                      height: 27,
+                      color: Colors.black,
+                    ),
+                  ),
                 ),
               ),
             ),
