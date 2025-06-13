@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:petscare/api/user_service.dart';
 import 'package:petscare/clinicScreensAndAppointment/bookappointement.dart';
+import 'package:petscare/clinicprofil/noti.dart';
 import 'package:petscare/loginpages/account_type_screen.dart';
 
 class Clinicprofile extends StatefulWidget {
@@ -46,6 +47,17 @@ class _MainclinicscreenState extends State<Clinicprofile> {
             }
           },
         ),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.notifications_none_rounded),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => Noti()),
+              );
+            },
+          ),
+        ],
         title: Text(
           "Clinic Details",
           style: TextStyle(
